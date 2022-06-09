@@ -8,62 +8,63 @@ import random
 board = ['''
 
 >>>>>>>>>>Hangman<<<<<<<<<<
-
+''', '''
 +---+
 |   |
     |
     |
     |
     |
-=========''', '''
-
-+---+
-|   |
-O   |
-    |
-    |
-    |
-=========''', '''
-
+=========
+''', '''
 +---+
 |   |
 O   |
+    |
+    |
+    |
+=========
+''', '''
++---+
+|   |
+O   |
 |   |
     |
     |
-=========''', '''
-
+=========
+''', '''
  +---+
  |   |
  O   |
 /|   |
      |
      |
-=========''', '''
-
+=========
+''', '''
  +---+
  |   |
  O   |
 /|\  |
      |
      |
-=========''', '''
-
+=========
+''', '''
  +---+
  |   |
  O   |
 /|\  |
 /    |
      |
-=========''', '''
-
+=========
+''', '''
  +---+
  |   |
  O   |
 /|\  |
 / \  |
      |
-=========''']
+=========
+''']
 
 
 # Classe
@@ -74,7 +75,7 @@ class Hangman:
 		self.letras_corretas = []
 		self.letras_erradas = []
 		self.palavra = list(palavra)
-		print(palavra)
+		#print(palavra)
 		
 	# Método para adivinhar a letra
 	def guess(self, letras):
@@ -108,18 +109,20 @@ class Hangman:
 					self.letras_erradas.extend(c)
 			verificador = False
 
-		print(self.resposta)
-		print('Letras erradas: ', (set(self.letras_erradas)))  # o set() vai embaralhar as letras, não ficará na ordem que o usuário digitou
-		print('Letras corretas: ', (set(self.letras_corretas)))
+		#print(self.resposta)
+		#print('Letras erradas: ' + ' '.join((set(self.letras_erradas))))  # o set() vai embaralhar as letras, não ficará na ordem que o usuário digitou
+		#print('Letras corretas: ' + ' '.join((set(self.letras_corretas))))
 
 		# pedaço do código para aparecer o '___...___' até a primeira letra correta ser chutada
 		y = []
-		while verify == True:
+		if verify == True:
 			for i in self.palavra:
 				y.extend('_')
-			print(y)
-			break
-		return self.resposta
+			#print(y)
+		else:
+			y.extend(self.resposta)
+
+		return self.resposta, y
 
 	# Método para verificar se o jogo terminou
 	def hangman_over(self):
@@ -138,8 +141,10 @@ class Hangman:
 		return venceu
 
 	# Método para não mostrar a letra no board
-	# def hide_word(self):
-		
+	def hide_word(self):
+
+		print('Letras erradas: ' + ' '.join((set(self.letras_erradas))))  # o set() vai embaralhar as letras, não ficará na ordem que o usuário digitou
+		print('Letras corretas: ' + ' '.join((set(self.letras_corretas))))
 		
 	# Método para checar o status do game e imprimir o board na tela
 	def print_game_status(self):
@@ -147,19 +152,19 @@ class Hangman:
 		# print(x)
 		if x >= 0 and x <= 6:
 			if x == 0:
-				print(board[0])
-			elif x == 1:
 				print(board[1])
-			elif x == 2:
+			elif x == 1:
 				print(board[2])
-			elif x == 3:
+			elif x == 2:
 				print(board[3])
-			elif x == 4:
+			elif x == 3:
 				print(board[4])
-			elif x == 5:
+			elif x == 4:
 				print(board[5])
-			elif x == 6:
+			elif x == 5:
 				print(board[6])
+			elif x == 6:
+				print(board[7])
 
 
 # Função para ler uma palavra de forma aleatória do banco de palavras
@@ -173,24 +178,37 @@ def rand_word():
 def main():
     # Objeto
     jogo = Hangman(rand_word())
+    lista = []
+    # print(lista)
+    answer = jogo.guess(lista)
+    print(board[0])
+    print('A palavra é: '+ ' '.join(answer[1]))
     jogo.print_game_status()
     terminou = False
-    venceu = False
-    lista = []
-    print(lista)
+    #venceu = False
+
 
     while terminou == False:
         entrada = list(str(input('Digite uma letra: ')))
-        print(entrada)
+        #print(entrada)
         lista.extend(entrada)
-        print(lista)
+        # print('letras:' +' '.join(lista))
         answer = jogo.guess(lista)
-        print(answer)
+        #print(answer[1])
+        #print('A palavra é: ' + ''.join(answer[0]))
         terminou = jogo.hangman_over()
-        print(terminou)
-        venceu = jogo.hangman_won()
+        #print(terminou)
+        #venceu = jogo.hangman_won()
         #print(venceu)
+        #print(answer[1])
+        print('\n')
+        print('A palavra é: ' + ' '.join(answer[1]))
         jogo.print_game_status()
+        #escondida = jogo.hide_word()
+        #print(escondida)
+        #print('A palavra é: ' + ' '.join(answer[1]))
+        jogo.hide_word()
+        #print('\n')
 
     if jogo.hangman_won():
         print('\nParabéns! Você venceu!!')
